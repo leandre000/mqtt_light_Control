@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT Light Control</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .light {
+            font-size: 100px;
+            margin: 20px 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .on-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .on-btn:hover {
+            background-color: #45a049;
+        }
+
+        .off-btn {
+            background-color: #d9534f;
+            color: white;
+        }
+
+        .off-btn:hover {
+            background-color: #c9302c;
+        }
+
+        p {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>💡 MQTT Light Control</h2>
+    
+    <div class="container">
+        <div id="light-bulb" class="light">💡</div>
+        <p id="status">Status: Waiting for command...</p>
+
+        <div class="buttons">
+            <button class="on-btn" onclick="sendCommand('ON')">Turn ON</button>
+            <button class="off-btn" onclick="sendCommand('OFF')">Turn OFF</button>
+        </div>
+    </div>
+
+    <script>
+        // Connect to MQTT broker (change this to your broker's WebSocket URL)
+        const client = mqtt.connect('ws://test.mosquitto.org:8080');
+
+        function sendCommand(command) {
+            client.publish('/student_group/light_control', command);
+            const statusText = document.getElementById('status');
+            const lightBulb = document.getElementById('light-bulb');
+
+            if (command === "ON") {
+                statusText.innerText = "Status: Light is ON 💡✨"; // Classic glowing bulb
+                lightBulb.innerHTML = "💡✨"; // Bright, kindergarten-style glowing bulb
+            } else {
+                statusText.innerText = "Status: Light is OFF 💡"; // Normal light bulb
+                lightBulb.innerHTML = "💡"; // Dim bulb
+            }
+        }
+    </script>
+
+</body>
+</html>
